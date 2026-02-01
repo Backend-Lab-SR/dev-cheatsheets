@@ -16,7 +16,7 @@ SELECT pg_size_pretty(pg_database_size('<database-name>'));
 
 -- Monitoring
 SELECT * FROM pg_stat_activity;
-# WARNING: Terminates the specified query/process
+-- WARNING: Terminates the specified query/process
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid = <process_id>; 
 ```
 
@@ -47,7 +47,7 @@ SHOW TABLE STATUS LIKE '<table-name>';
 
 -- Monitoring
 SHOW PROCESSLIST;
-# WARNING: Terminates the specified query/process
+-- WARNING: Terminates the specified query/process
 KILL <process-id>;
 SHOW VARIABLES LIKE '%max_connections%';
 SHOW STATUS LIKE '%connections%';
@@ -105,6 +105,7 @@ SET key value
 GET key
 DEL key
 EXISTS key
+# WARNING: KEYS can block Redis on large datasets
 KEYS pattern
 TTL key
 EXPIRE key seconds

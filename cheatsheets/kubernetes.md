@@ -8,8 +8,8 @@ kubectl cluster-info
 kubectl get nodes
 
 # Get Kubernetes version
-kubectl version
-kubectl version --client
+kubectl version --short
+kubectl version --client --short
 
 # View configuration
 kubectl config view
@@ -34,7 +34,9 @@ kubectl describe pod <pod-name>
 kubectl describe pod <pod-name> -n <namespace>
 
 # Get pod logs
-kubectl logs <pod-name>
+kubectl logs <pod-name> --previous
+# Logs with namespace
+kubectl logs <pod-name> -n <namespace>
 kubectl logs -f <pod-name>  # Follow logs
 kubectl logs --tail=100 <pod-name>
 kubectl logs <pod-name> -c <container-name>  # Multi-container
@@ -45,6 +47,7 @@ kubectl exec -it <pod-name> -- /bin/bash
 
 # Delete pod
 kubectl delete pod <pod-name>
+# WARNING: Force delete can cause data loss
 kubectl delete pod <pod-name> --force --grace-period=0
 
 # Port forward
@@ -74,6 +77,10 @@ kubectl rollout restart deployment/<name>
 # Rollout status
 kubectl rollout status deployment/<name>
 kubectl rollout history deployment/<name>
+
+# Pause / resume rollout
+kubectl rollout pause deployment/<name>
+kubectl rollout resume deployment/<name>
 
 # Rollback deployment
 kubectl rollout undo deployment/<name>
