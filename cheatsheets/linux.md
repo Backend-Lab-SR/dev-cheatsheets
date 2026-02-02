@@ -23,10 +23,16 @@ pwd
 mkdir <directory>
 mkdir -p path/to/directory  # Create parent directories
 
-# Remove directory
+# Remove directory (only works if directory is empty)
 rmdir <directory>
-rm -r <directory>  # Recursive
-rm -rf <directory>  # Force recursive
+
+# Recursively deletes a directory and all its contents
+# WARNING: This permanently deletes files and subdirectories
+rm -r <directory>
+
+# Force recursive delete
+# WARNING: No confirmation, irreversible data loss if used incorrectly
+rm -rf <directory>
 
 # Copy file/directory
 cp <source> <destination>
@@ -38,7 +44,10 @@ mv <source> <destination>
 
 # Remove file
 rm <file>
-rm -f <file>  # Force
+
+# Force remove file
+# WARNING: Deletes file without confirmation
+rm -f <file>
 rm -i <file>  # Interactive
 
 # Create file
@@ -59,6 +68,7 @@ tail -n 20 <file>  # Last 20 lines
 
 ```bash
 # Change permissions
+# WARNING: Incorrect permissions can break applications or reduce security
 chmod 755 <file>
 chmod +x <file>  # Add execute
 chmod -x <file>  # Remove execute
@@ -67,8 +77,11 @@ chmod g+w <file>  # Group write
 chmod o+r <file>  # Others read
 
 # Change ownership
+# WARNING: Requires root privileges and may break application access
 chown user:group <file>
-chown -R user:group <directory>  # Recursive
+
+# WARNING: Can break entire directory trees or system behavior
+chown -R user:group <directory> # Recursive
 
 # Change group
 chgrp <group> <file>
@@ -113,6 +126,7 @@ cut -f1-3 <file>  # Tab delimiter, fields 1-3
 
 # Replace text
 sed 's/old/new/g' <file>
+# WARNING: Modifies the file permanently
 sed -i 's/old/new/g' <file>  # In-place edit
 
 # Stream editor
@@ -137,12 +151,16 @@ top
 htop  # If installed
 
 # Kill process
+# Terminate process
 kill <pid>
+# WARNING: Prevents cleanup and may cause data corruption
 kill -9 <pid>  # Force kill
+# WARNING: Terminates ALL matching processes
 killall <process-name>
 
 # Background process
 <command> &
+# WARNING: Failures may go unnoticed when running in background
 nohup <command> &  # No hangup
 
 # Jobs
@@ -177,7 +195,7 @@ lscpu
 cat /proc/cpuinfo
 
 # Network
-ifconfig
+ifconfig  # Legacy, use ip addr
 ip addr
 netstat -tulpn
 ss -tulpn
@@ -202,16 +220,20 @@ curl -O <url>  # Save as file
 curl -L <url>  # Follow redirects
 
 # SSH
+# WARNING: Connecting to the wrong host or user can expose credentials
 ssh user@host
 ssh -p <port> user@host
 ssh -i <key-file> user@host
 
 # SCP
+# Copy files over network
+# WARNING: Files may be overwritten at destination
 scp <file> user@host:/path
 scp -r <directory> user@host:/path
 scp user@host:/path/file ./
 
 # Port forwarding
+# WARNING: Can expose local or remote services if misconfigured
 ssh -L <local-port>:<remote-host>:<remote-port> user@host
 ```
 
@@ -219,7 +241,9 @@ ssh -L <local-port>:<remote-host>:<remote-port> user@host
 
 ```bash
 # Tar
+# WARNING: Overwrites existing archive with same name
 tar -cf archive.tar <files>  # Create
+# WARNING: Can overwrite existing files
 tar -xf archive.tar  # Extract
 tar -czf archive.tar.gz <files>  # Compress with gzip
 tar -xzf archive.tar.gz  # Extract gzip
@@ -231,10 +255,12 @@ zip archive.zip <files>
 unzip archive.zip
 
 # Gzip
+# WARNING: Can overwrite existing files
 gzip <file>
 gunzip <file>.gz
 
 # Bzip2
+# WARNING: Replaces original file with compressed version
 bzip2 <file>
 bunzip2 <file>.bz2
 ```
@@ -243,6 +269,7 @@ bunzip2 <file>.bz2
 
 ```bash
 # Set variable
+# Add to ~/.bashrc or ~/.zshrc for persistence
 export VAR=value
 
 # View variable
@@ -265,8 +292,10 @@ export VAR=value
 ```bash
 # Debian/Ubuntu (apt)
 apt update
+# WARNING: May break running services or dependencies
 apt upgrade
 apt install <package>
+# WARNING: Removes package and possibly dependent software
 apt remove <package>
 apt search <package>
 apt list --installed
@@ -274,6 +303,7 @@ apt list --installed
 # RedHat/CentOS (yum)
 yum update
 yum install <package>
+# WARNING: Removes package and possibly dependent software
 yum remove <package>
 yum search <package>
 yum list installed
@@ -281,6 +311,7 @@ yum list installed
 # RedHat/CentOS (dnf)
 dnf update
 dnf install <package>
+# WARNING: Removes package and possibly dependent software
 dnf remove <package>
 dnf search <package>
 
@@ -297,8 +328,13 @@ pacman -Ss <package>  # Search
 # History
 history
 history | grep <command>
+# WARNING: Executes immediately without review
 !<number>  # Execute history number
+
+# WARNING: May repeat a destructive command
 !!  # Last command
+
+# WARNING: May unintentionally target wrong file or path
 !$  # Last argument
 
 # Alias
@@ -335,7 +371,9 @@ logout
 
 ```bash
 # Run as root
+# WARNING: Full system privileges
 sudo <command>
+# WARNING: Full administrative shell
 su -  # Switch user
 
 # Service management (systemd)
